@@ -1,0 +1,30 @@
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: linear-gradient(to top, rgba(10, 25, 47, 0.938), rgb(24, 45, 77));;
+    z-index: 999;
+}
+
+.header__logo img {
+    width: 45px;
+    height: 45px;
+    padding-top: 7px;
+}
+
+.header__center {
+    display: flex;
+    flex-wrap: wrap;
+    color: #1aa07f;
+    padding: 7px 10px;
+    font-family: "SF Mono", monospace;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.header__socialnav{
+    margin: auto 0;
+}
