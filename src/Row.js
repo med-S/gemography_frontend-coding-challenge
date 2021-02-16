@@ -3,7 +3,7 @@ import "./Row.css";
 import {Avatar} from '@material-ui/core';
 
 
-function Row({avatar, owner, repoName, repoDescription, stars, issues, date}) {
+function Row({ avatar, owner, repoName, repoDescription, stars, issues, date}) {
     return (
         <div className="row">
             <div className="row__avatar">

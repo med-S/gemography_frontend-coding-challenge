@@ -1,51 +1,62 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./Feed.css";
 import Row from "./Row";
 import getDate from './functions/getDate';
-import { fetchRepos } from './functions/fetchRepos';
 import abbreviateNumbers from './functions/abbreviateNumbers';
-import moment from 'moment-timezone';
-import {connect} from 'connect';
+import axios from "axios";
+
 
 const default_url = "https://api.github.com/search/repositories?q=created:>" + getDate() + "&sort=stars&order=desc";
 
-
-
 function Feed() {
 
-    useEffect((url=default_url)=> {
-      /** Fetching data */
+  const [items, setItems] = useState([]);
 
-    }, []);
+  useEffect(() => {
+    const getData = async () => {
+      fetch(default_url)
+      .then(res => res.json())
+      .then((data) => {      
+        console.log(data.items);
+        const items = data.items.map((item) => ({
+          key: item.node_id,
+          avatar: item.owner.avatar_url,
+          owner: item.owner.login,
+          repoName: item.name,
+          repoDescription: item.description,
+          stars: abbreviateNumbers(item.stargazers_count) ,
+          issues: abbreviateNumbers(item.open_issues_count),     
+        }));
+      
+        setItems(items);
+        console.log(items);
+        
+      }).catch((err)=> console.log(err));
+     
+    };
+    getData();
+    
+  }, []);
 
 
-    return (
-        <div className="feed">
-          
-            {/* <Row 
-              key={i}
-              avatar={item.owner.avatar_url}
-              repoName={item.name} 
-              repoDescription={item.description}
-              stars={abbreviateNumbers(item.stargazers_count)}
-              issues={abbreviateNumbers(item.open_issues_count)}
-              date={moment(item.created_at, "YYYYMMDD").fromNow()}
-              owner={item.owner.login}
-            /> */}
+  return (
+    <div className="feed">
    
-        </div>
-    )
+
+      {items.map((item) => (
+        <Row
+        key={item.key}
+        avatar={item.avatar} 
+        owner={item.owner}
+        repoName={item.repoName}
+        repoDescription={item.repoDescription}
+        stars={item.stars}
+        issues={item.issues}/>
+      ))}
+  
+    </div>
+  )
 }
-
-const mapDispatchToProps = (dispatch, url = default_url) => ({
-  fetchRepos: (url) => {
-    dispatch(fetchRepos(url));
-  }
-})
-
-const mapStateToProps = (state) => ({
-  repos: state.repos,
-})
 
 
 export default Feed
